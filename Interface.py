@@ -1,21 +1,46 @@
 import tkinter as tk
+import cv2
+import face_recognition
 import tkinter.font as tkFont
 
+def capture_and_identify():
+    video_capture = cv2.VideoCapture(0) # Inicializa a câmera
+    while True:
+        loader, frame = video_capture.read()
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        face_locations = face_recognition.face_locations(gray) #detecta faces
+        for (top, right, bottom, left) in face_locations:
+            cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)  # Desenha um retângulo ao redor do rosto detectado
+             # Identificação do usuário
+            # Aqui você pode adicionar a lógica para comparar com uma base de dados de rostos conhecidos
+        cv2.imshow('Video', frame)# Exibe o quadro de vídeo com os rostos detectados
+        
+        if cv2.waitKey(1) & 0xFF == ord('q'):# ao apertar Q sai da captura
+            break
+    video_capture.release()
+    cv2.destroyAllWindows()
 
-window = tk.Tk()
-window.title("2º - Vara Criminal")
-window.geometry("500x400")
+def start_capture():
+    root.withdraw() #Sai da janela principal e troca pela do video
+    
+    capture_and_identify()
+    
+    # Mostra a janela principal novamente quando a captura for concluída
+    root.deiconify()
 
-font = tkFont.Font(size=24) #define o tamanho da fonte
+# Cria a janela principal
+root = tk.Tk()
+root.title("2º - Vara Criminal")
+root.geometry("500x400")
 
-Label = tk.Label(window, text = "Selecione 'Acesso' para continuar.", font = font)
+font = tkFont.Font(size=24)
+
+Label = tk.Label(root, text = "Selecione 'Acesso' para continuar.\n Aperte 'Q' para sair.", font = font)
 Label.pack()
 
 
-frame = tk.Frame(window)
-frame.pack(expand=True)
+#Botão tela principal
+button = tk.Button(root, text="Acesso", width=40, height=2, command=start_capture)
+button.pack(anchor= tk.CENTER, side=tk.TOP)
 
-access_button = tk.Button(frame, text="Acesso", width=40, height=2)
-access_button.pack(anchor= tk.CENTER, side=tk.TOP)
-
-window.mainloop()
+root.mainloop()
