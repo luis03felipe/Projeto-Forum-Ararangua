@@ -11,8 +11,7 @@ def capture_and_identify():
         face_locations = face_recognition.face_locations(gray) #detecta faces
         for (top, right, bottom, left) in face_locations:
             cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)  # Desenha um retângulo ao redor do rosto detectado
-             # Identificação do usuário
-            # Aqui você pode adicionar a lógica para comparar com uma base de dados de rostos conhecidos
+             
         cv2.imshow('Video', frame)# Exibe o quadro de vídeo com os rostos detectados
         
         if cv2.waitKey(1) & 0xFF == ord('q'):# ao apertar Q sai da captura
